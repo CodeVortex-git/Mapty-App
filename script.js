@@ -11,14 +11,25 @@ const inputDuration = document.querySelector('.form__input--duration');
 const inputCadence = document.querySelector('.form__input--cadence');
 const inputElevation = document.querySelector('.form__input--elevation');
 
-navigator.geolocation.getCurrentPosition(
-  position => {
-    const { latitude } = position.coords;
-    const { longitude } = position.coords;
-    console.log(position);
-    console.log(`https://www.google.com/maps/@${latitude}, ${longitude}`);
-  },
-  () => {
-    alert(`Error, could not get your position`);
-  },
-);
+if (navigator.geolocation)
+  navigator.geolocation.getCurrentPosition(
+    position => {
+      const { latitude } = position.coords;
+      const { longitude } = position.coords;
+      console.log(position);
+      console.log(`https://www.google.com/maps/@${latitude}, ${longitude}`);
+
+      const coords = [latitude, longitude];
+      const map = L.map('map').setView(coords, 13);
+
+      L.tileLayer('https://tile.openstreetmap.fr/hot/{z}/{x}/{y}.png', {
+        attribution:
+          '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors',
+      }).addTo(map);
+
+      L.marker(coords).addTo(map).bindPopup('Your location').openPopup();
+    },
+    () => {
+      alert(`Error, could not get your position`);
+    },
+  );
