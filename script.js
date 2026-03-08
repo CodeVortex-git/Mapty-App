@@ -22,12 +22,30 @@ if (navigator.geolocation)
       const coords = [latitude, longitude];
       const map = L.map('map').setView(coords, 13);
 
-      L.tileLayer('https://tile.openstreetmap.fr/hot/{z}/{x}/{y}.png', {
+      L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
         attribution:
           '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors',
       }).addTo(map);
+      let marker; //Creates the marker variable to store the current click location
 
-      L.marker(coords).addTo(map).bindPopup('Your location').openPopup();
+      map.on('click', e => {
+        const { lat, lng } = e.latlng;
+        map.panTo([lat, lng]); // Always pans to the marker location
+
+        L.marker([lat, lng])
+          .addTo(map)
+          .bindPopup('Workout', { autoClose: false, closeOnClick: false }) //Disables autoclose of the popup message
+          .openPopup();
+        // if (marker) {
+        //   marker.setLatLng([lat, lng]);
+        //   marker.openPopup();
+        // } else {
+        //   marker = L.marker([lat, lng])
+        //     .addTo(map)
+        //     .bindPopup('Workout location')
+        //     .openPopup();
+        // }
+      });
     },
     () => {
       alert(`Error, could not get your position`);
