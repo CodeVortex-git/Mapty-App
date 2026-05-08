@@ -1,5 +1,7 @@
 'use strict';
 
+const { popup } = require('leaflet');
+
 // prettier-ignore
 const months = ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December'];
 
@@ -34,7 +36,16 @@ if (navigator.geolocation)
 
         L.marker([lat, lng])
           .addTo(map)
-          .bindPopup('Workout', { autoClose: false, closeOnClick: false }) //Disables autoclose of the popup message
+          .bindPopup(
+            L.popup({
+              maxWidth: 250,
+              minWidth: 100,
+              autoclose: false, //Disables autoclose of the popup message
+              closeOnClick: false, //Disables close on click of the popup message
+              className: 'running-popup',
+            }),
+          )
+          .setPopupContent('Hi there Sucker')
           .openPopup();
         // if (marker) {
         //   marker.setLatLng([lat, lng]);
